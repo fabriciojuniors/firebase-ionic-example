@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DataService, Message } from '../services/data.service';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,10 @@ import { DataService, Message } from '../services/data.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  constructor(private data: DataService) {}
+  token: string = '';
+  constructor(private data: DataService, private notification : NotificationService) {
+    this.getToken();
+  }
 
   refresh(ev) {
     setTimeout(() => {
@@ -19,4 +23,8 @@ export class HomePage {
     return this.data.getMessages();
   }
 
+  async getToken(){
+    await this.notification.initPush();
+    this.token = window.localStorage.getItem('pushToken');
+  }
 }
